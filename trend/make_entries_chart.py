@@ -23,7 +23,6 @@ dataPlot = "var dataPlot1 =["
 
 for k,v in sorted(datapoints.items(), key=lambda x: x[0]):
     if k == -1 :
-        print "none"
         data = "{ label: %d, y: %d, indexLabel: " % (k, v)
         data += u"\"不明\" },"
     else:
@@ -36,7 +35,6 @@ dataPlot += "var dataPlot2 =["
 
 for k,v in sorted(datapoints.items(), key=lambda x: x[1], reverse=True):
     if k == -1 :
-        print "none"
         data = "{ label: %d, y: %d, indexLabel: " % (k, v)
         data += u"\"不明\" },"
     else:
