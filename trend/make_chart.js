@@ -2,8 +2,12 @@
 window.onload = function () {
 	var chart1 = new CanvasJS.Chart("entries_chart_1", {
 		title:{
-			text: "回期別 参加申込み人数（回期順）"
+			text: "回期別 参加申込み人数（回期順） 計: " + total + "人"
 		},
+		subtitles:[
+		{
+			text: "更新: " + last_modified
+		}],
 		data: [
 			{
 				type: 'column',
@@ -23,8 +27,12 @@ window.onload = function () {
 
 	var chart2 = new CanvasJS.Chart("entries_chart_2", {
 		title:{
-			text: "回期別 参加申込み人数（申し込み人数順）"
+			text: "回期別 参加申込み人数（申込み人数順） 計: " + total + "人"
 		},
+		subtitles:[
+		{
+			text: "更新: " + last_modified
+		}],
 		data: [
 			{
 				type: 'column',
