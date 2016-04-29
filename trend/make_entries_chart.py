@@ -19,7 +19,7 @@ def main():
     rows = sheet.iter_rows('H2:H'+str(maxrow))
     for row in rows:
         for cell in row:
-            if cell.value == 'None':
+            if str(cell.value) == 'None':
                 datapoints[-1] += 1
             else:
                 datapoints[cell.value] += 1
