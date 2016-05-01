@@ -5,7 +5,8 @@ from openpyxl import load_workbook
 def main():
     datapoints = {}
     datapoints[-1] = 0
-    for i in range(1,67):
+    newface = datetime.date.today().year - 1949 # 西暦から回期を求める
+    for i in range(1,newface):
         datapoints[i] = 0
 
     stat = os.stat(sys.argv[1])
@@ -19,11 +20,17 @@ def main():
     rows = sheet.iter_rows('H2:H'+str(maxrow))
     for row in rows:
         for cell in row:
-            if str(cell.value) == 'None':
+            if cell.value in range(1,newface):
+                datapoints[cell.value] += 1
+            elif isinstance(cell.value, unicode):
+                print '不正な回期: %s' % str(cell.value)
+            elif str(cell.value) == 'None':
                 datapoints[-1] += 1
             else:
-                datapoints[cell.value] += 1
+                print '不正な回期: %s' % str(cell.value)
             entries += 1
+            if cell.value in range(newface--3,newface--1):
+                print '学生: %s' % str(cell.value)
 
     total = "var total = %d\n" % entries
 
