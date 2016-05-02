@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-import sys, codecs, datetime, os
+import sys, codecs, datetime, os, re
 from openpyxl import load_workbook
 
 def main():
     datapoints = {}
     datapoints[-1] = 0
-    newface = datetime.date.today().year - 1949 # 西暦から回期を求める
-    for i in range(1,newface):
+    newface = datetime.date.today().year - 1950 # 西暦から回期を求める
+    range_end = newface + 1
+    for i in range(1,range_end):
         datapoints[i] = 0
 
     stat = os.stat(sys.argv[1])
@@ -17,20 +18,37 @@ def main():
     sheet = book[u'参加者']
     maxrow = sheet.max_row
     entries = 0
+
     rows = sheet.iter_rows('H2:H'+str(maxrow))
     for row in rows:
         for cell in row:
-            if cell.value in range(1,newface):
-                datapoints[cell.value] += 1
-            elif isinstance(cell.value, unicode):
-                print '不正な回期: %s' % str(cell.value)
-            elif str(cell.value) == 'None':
+            entries += 1
+            val = cell.value
+            name = sheet["A%d" % cell.row].value
+            ticket_type = sheet["E%d" % cell.row].value
+            if val in range(1,range_end):
+                datapoints[val] += 1
+                if val in range(newface,range_end):
+                    print u'新卒: %s' % str(val),
+                    print ticket_type, name
+                if cell.value in range(newface-3,newface):
+                    print u'学生: %s' % str(val),
+                    print ticket_type, name
+                if cell.value in range(newface-6,newface-3):
+                    print u'学生・院生かも？: %s' % str(val),
+                    print ticket_type, name
+                if cell.value in range(29,30) or cell.value in range(42,43):
+                    print u'当番: %s' % str(val),
+                    print name
+            elif val is None:
                 datapoints[-1] += 1
             else:
-                print '不正な回期: %s' % str(cell.value)
-            entries += 1
-            if cell.value in range(newface--3,newface--1):
-                print '学生: %s' % str(cell.value)
+                datapoints[-1] += 1
+                print u'不正な回期入力: ',
+                if not isinstance(val, unicode):
+                    print str(val),name
+                else:
+                    print val,name
 
     total = "var total = %d\n" % entries
 
